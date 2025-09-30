@@ -10,7 +10,6 @@ endif()
 
 # --- Source files ---
 set(SOURCES
-    imutil.cpp
     src/render/render.cpp
     vendor/imgui/imgui.cpp
     vendor/imgui/imgui_demo.cpp
