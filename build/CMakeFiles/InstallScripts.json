@@ -1,0 +1,10 @@
+{
+	"InstallScripts" : 
+	[
+		"D:/CODE/imutil/build/cmake_install.cmake",
+		"D:/CODE/imutil/build/vendor/glfw/cmake_install.cmake",
+		"D:/CODE/imutil/build/vendor/glfw/src/cmake_install.cmake",
+		"D:/CODE/imutil/build/vendor/glfw/docs/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

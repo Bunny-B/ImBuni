@@ -1,0 +1,10 @@
+^D:\CODE\IMUTIL\BUILD\CMAKEFILES\A5D6EE8038843A940D591E8CE5512230\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/CODE/imutil -BD:/CODE/imutil/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/CODE/imutil/build/ImBuni.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
