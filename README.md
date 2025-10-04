@@ -1,1 +1,1 @@
-target_link_libraries(${PROJECT_NAME} PRIVATE stb_image)
+git clone --recurse-submodules https://github.com/Bunny-B/ImBuni.git
