@@ -51,10 +51,18 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw/include
 )
 
+add_library(stb_image INTERFACE)
+target_include_directories(stb_image INTERFACE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb
+)
+
+
 # --- System dependencies ---
 if (WIN32)
     target_link_libraries(${PROJECT_NAME} PUBLIC glfw opengl32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE stb_image)
 elseif(UNIX)
+    target_link_libraries(${PROJECT_NAME} PRIVATE stb_image)
     target_link_libraries(${PROJECT_NAME} PUBLIC glfw OpenGL::GL)
     target_link_libraries(${PROJECT_NAME} PUBLIC
         pthread
@@ -75,7 +83,6 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Source Files"
     FILES
         src/render/render.cpp
         src/render/render.h
-        src/render/WinApi.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui PREFIX "ImGui"
