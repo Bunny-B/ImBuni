@@ -3,6 +3,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include <format>
+#include "gl/GL.h"
+#include <algorithm>
+
 namespace render {
 
     static bool LoadTextureFromMemory(unsigned char* image_data, GLuint* out_texture, int image_width, int image_height)
@@ -28,6 +31,48 @@ namespace render {
 
         *out_texture = texture_id;
         return true;
+    }
+
+    void cpu_blur(GLuint tex, ImVec2 size, int radius)
+    {
+        if (radius <= 0) return;
+
+        // Bind the texture and read pixels
+        glBindTexture(GL_TEXTURE_2D, tex);
+        std::vector<unsigned char> pixels(size.x * size.y * 4); // RGBA
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+
+        std::vector<unsigned char> temp = pixels;
+
+        // Simple box blur
+        for (int y = 0; y < (int)size.y; ++y)
+        {
+            for (int x = 0; x < (int)size.x; ++x)
+            {
+                int sum[4] = { 0, 0, 0, 0 };
+                int count = 0;
+
+                for (int dy = -radius; dy <= radius; ++dy)
+                {
+                    int yy = std::clamp(y + dy, 0, (int)size.y - 1);
+                    for (int dx = -radius; dx <= radius; ++dx)
+                    {
+                        int xx = std::clamp(x + dx, 0, (int)size.x - 1);
+                        unsigned char* p = &temp[(yy * (int)size.x + xx) * 4];
+                        for (int c = 0; c < 4; ++c)
+                            sum[c] += p[c];
+                        count++;
+                    }
+                }
+
+                unsigned char* dst = &pixels[(y * (int)size.x + x) * 4];
+                for (int c = 0; c < 4; ++c)
+                    dst[c] = static_cast<unsigned char>(sum[c] / count);
+            }
+        }
+
+        // Write blurred pixels back to the texture
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (int)size.x, (int)size.y, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
     }
 
     Texture::Texture(const char* filename) {
@@ -61,7 +106,7 @@ namespace render {
                     gr->data = 0;
                     break;
                 }
-
+                //            GLuint               data;
                 LoadTextureFromMemory(result, &gr->data, g.w, g.h);
                 if (prev) prev->next = gr;
                 gr->delay = g.delay;
@@ -131,5 +176,34 @@ namespace render {
     {
         ImGui::Image((ImTextureID)(intptr_t)get_current(), get_size());
     }
+
+    void Texture::blur(int radius)
+    {
+        
+            const auto& size = get_size();
+            cpu_blur(head.data, size, radius);
+
+            auto current = head.next;
+            for (int i = 1; i < frames; ++i)
+            {
+                if (current)
+                {
+                    auto prev = current;
+                    current = current->next;
+                    cpu_blur(prev->data, size, radius);
+                }
+            }
+
+            blur_count++;       
+    }
+
+    void Texture::image_blur(int radius, int multiple) {
+        if (blur_count != multiple)
+            for (int n = 0; n < multiple; n++)
+                blur(radius);
+
+        image();
+    }
+
 
 }

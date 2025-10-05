@@ -74,13 +74,17 @@ namespace render {
 
         void image();
 
+        void image_blur(int radius,int multiple = 1);
     private:
+        void blur(int radius);
+
         std::string filepath = "";
 
         int x, y, frames = 0;
         frame_data head{};
         frame_data* current{};
         CTimer timer{};
+        int blur_count = 0;
     };
 
     /*
