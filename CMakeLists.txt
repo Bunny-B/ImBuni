@@ -16,9 +16,6 @@ set(SOURCES
     vendor/imgui/imgui_draw.cpp
     vendor/imgui/imgui_tables.cpp
     vendor/imgui/imgui_widgets.cpp
-
-    vendor/imgui/backends/imgui_impl_opengl3.cpp
-    vendor/imgui/backends/imgui_impl_glfw.cpp
 )
 
 # --- Header files (for IDE) ---
@@ -30,9 +27,6 @@ set(HEADERS
     vendor/imgui/imstb_rectpack.h
     vendor/imgui/imstb_textedit.h
     vendor/imgui/imstb_truetype.h
-
-    vendor/imgui/backends/imgui_impl_opengl3.h
-    vendor/imgui/backends/imgui_impl_glfw.h
 )
 
 add_subdirectory(vendor/glfw)
@@ -52,17 +46,14 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 add_library(stb_image INTERFACE)
-target_include_directories(stb_image INTERFACE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb
-)
+target_include_directories(stb_image INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb)
+target_link_libraries(${PROJECT_NAME} PRIVATE stb_image)
 
 
 # --- System dependencies ---
 if (WIN32)
     target_link_libraries(${PROJECT_NAME} PUBLIC glfw opengl32)
-    target_link_libraries(${PROJECT_NAME} PRIVATE stb_image)
 elseif(UNIX)
-    target_link_libraries(${PROJECT_NAME} PRIVATE stb_image)
     target_link_libraries(${PROJECT_NAME} PUBLIC glfw OpenGL::GL)
     target_link_libraries(${PROJECT_NAME} PUBLIC
         pthread
@@ -98,4 +89,12 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui PREFIX "ImGui"
         vendor/imgui/imstb_rectpack.h
         vendor/imgui/imstb_textedit.h
         vendor/imgui/imstb_truetype.h
+)
+
+file(GLOB_RECURSE STB_HEADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb/*.h
+)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb PREFIX "stb"
+    FILES ${STB_HEADERS}
 )
