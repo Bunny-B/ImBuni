@@ -43,10 +43,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/backends
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb
+
 )
 
 add_library(stb_image INTERFACE)
-target_include_directories(stb_image INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb)
 target_link_libraries(${PROJECT_NAME} PRIVATE stb_image)
 
 
@@ -91,10 +92,8 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui PREFIX "ImGui"
         vendor/imgui/imstb_truetype.h
 )
 
-file(GLOB_RECURSE STB_HEADERS
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb/*.h
-)
-
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb PREFIX "stb"
-    FILES ${STB_HEADERS}
+    FILES 
+        vendor/stb/stb_image.h
+
 )
