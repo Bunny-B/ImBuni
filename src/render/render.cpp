@@ -1,6 +1,8 @@
+#include <thread>
+#include <stdio.h>
+
 #include "render.h"
 #include "imgui.h"
-#include "stdio.h"
 
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -10,7 +12,8 @@
 #include <GLES2/gl2.h>
 #endif
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
-#include <thread>
+#include <GL/gl.h>       // needed for GL_CLAMP_TO_EDGE
+
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
 // Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
@@ -23,8 +26,6 @@
 #include <GLFW/glfw3native.h>   // for glfwGetWin32Window
 #include <Windows.h>
 #endif
-
-#define STB_IMAGE_IMPLEMENTATION
 
 
 namespace render {
@@ -204,4 +205,5 @@ namespace render {
         if (renderThread.joinable())
             renderThread.join();
     }
+
 }

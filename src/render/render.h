@@ -2,6 +2,7 @@
 #define RENDER_H
 #include <thread>
 #include <atomic>
+#include "texture.h"
 
 namespace render
 {
@@ -11,6 +12,7 @@ namespace render
 	extern void startRenderThread(const char* window_name, void(*renderFunction)(), bool is_overlay, void* hIcon = nullptr, void* hIconSm = nullptr);
 
 	extern void stopRenderThread();
+
 };
 
 #endif // !RENDER_H

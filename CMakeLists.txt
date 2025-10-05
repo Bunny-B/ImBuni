@@ -11,16 +11,23 @@ endif()
 # --- Source files ---
 set(SOURCES
     src/render/render.cpp
+    src/render/texture.cpp
+
     vendor/imgui/imgui.cpp
     vendor/imgui/imgui_demo.cpp
     vendor/imgui/imgui_draw.cpp
     vendor/imgui/imgui_tables.cpp
     vendor/imgui/imgui_widgets.cpp
+
+    vendor/imgui/backends/imgui_impl_glfw.cpp
+    vendor/imgui/backends/imgui_impl_opengl3.cpp
 )
 
 # --- Header files (for IDE) ---
 set(HEADERS
     src/render/render.h
+    src/render/texture.h
+    vendor/stb/stb_image.h
     vendor/imgui/imconfig.h
     vendor/imgui/imgui.h
     vendor/imgui/imgui_internal.h
@@ -75,6 +82,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Source Files"
     FILES
         src/render/render.cpp
         src/render/render.h
+        src/render/texture.h
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui PREFIX "ImGui"
